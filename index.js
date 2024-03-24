@@ -6,7 +6,7 @@
 
 
 // database-
-const listProduct = [];
+let listProduct = [];
 
 
 // // navigation show-hide-part-1
@@ -32,6 +32,7 @@ const addToCartBtns = document
   .querySelectorAll("button");
 addToCartBtns.forEach((cardBtn) => {
   cardBtn.addEventListener("click", (e) => {
+
     const buttonParent = e.target.parentNode;
     const card = buttonParent.parentNode;
     const cardparent = card.parentNode;
@@ -48,28 +49,49 @@ addToCartBtns.forEach((cardBtn) => {
       img: img,
     };
 
-    listProduct.push(newProductObj);
-    const allCart = document.querySelector(".all-cart");
-    listProduct.forEach((singleProduct)=>{
+    /* check if the item already  exist in array or not */
+    let isExist = listProduct.find((singleProduct) => singleProduct.title === newProductObj.title);
+    if (!isExist) {
 
-    allCart.innerHTML += `
-    
-   <div class="cart">
-        <div class="images">
-            <img src="${singleProduct.img}">
-        </div>
-        <div class="cart-details">
-            <h4>${singleProduct.title}</h4>
-            <p>${singleProduct.price}</p>
-        </div>
-        <div class="delete">
-            <span>${singleProduct.price}</span>
-            <i class="fa-solid fa-trash deleteButton"></i>
-        </div>
-   </div>
-    
-   `
-    })
+      listProduct.push(newProductObj);
+      
+      const allCart = document.querySelector(".all-cart");
+      
+      /* clear everything before adding new items */
+      /* as our listProduct is a global variable so we should clear it (.all-cart) to reduce */
+      /* repetition of same item */
+      allCart.innerHTML = ''; 
+       
+      listProduct.forEach((singleProduct)=>{
+
+        console.log(singleProduct);
+  
+      allCart.innerHTML += `
+      
+     <div class="cart">
+          <div class="images">
+              <img src="${singleProduct.img}">
+          </div>
+          <div class="cart-details">
+              <h4>${singleProduct.title}</h4>
+              <p>${singleProduct.price}</p>
+          </div>
+          <div class="delete">
+              <span>${singleProduct.price}</span>
+              <i class="fa-solid fa-trash deleteButton"></i>
+          </div>
+     </div>
+      
+     `
+      })
+    }
+    else{
+      alert("this product is already added!");
+      return;
+    }
+
+
+   
 
 
   });
